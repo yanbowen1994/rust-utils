@@ -1,6 +1,7 @@
 [workspace]
 
 members = [
+    "error-msg",
     "logger",
     "version-info",
 ]
