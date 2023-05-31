@@ -1,0 +1,11 @@
+[package]
+name = "logger"
+version = "1.0.0"
+authors = ["yanbowen <yanbowen199407@gmail.com>"]
+edition = "2021"
+
+[dependencies]
+yansi = "0.5"
+flexi_logger = { version = "0.16.1", features = ["colors"] }
+log = { version = "0.4" }
+
