@@ -93,14 +93,12 @@ pub fn init_logger(
     log_dir: Option<String>,
     log_rotate_day: bool,
     log_keep_files: Option<usize>,
-    log_color: bool,
 ) -> Result<ReconfigurationHandle, FlexiLoggerError> {
     init_logger_with_filters(
         log_level,
         log_dir,
         log_rotate_day,
         log_keep_files,
-        log_color,
         BTreeMap::new(),
     )
 }
@@ -110,7 +108,6 @@ pub fn init_logger_with_filters(
     log_dir: Option<String>,
     log_rotate_day: bool,
     log_keep_files: Option<usize>,
-    log_color: bool,
     log_filters: BTreeMap<String, log::LevelFilter>,
 ) -> Result<ReconfigurationHandle, FlexiLoggerError> {
     let mut f: Vec<ModuleFilter> = vec![];
@@ -129,21 +126,12 @@ pub fn init_logger_with_filters(
 
     let log_spec = LogSpecBuilder::from_module_filters(&f).build();
 
-    let logger = if log_color {
-        flexi_logger::Logger::with(log_spec)
-            .format_for_writer(color_logger_format)
-            .format_for_files(nocolor_logger_format)
-            .log_target(LogTarget::FileAndWriter(Box::new(StdoutLogWriter::new(
-                color_logger_format,
-            ))))
-    } else {
-        flexi_logger::Logger::with(log_spec)
-            .format_for_writer(nocolor_logger_format)
-            .format_for_files(nocolor_logger_format)
-            .log_target(LogTarget::FileAndWriter(Box::new(StdoutLogWriter::new(
-                nocolor_logger_format,
-            ))))
-    };
+    let logger = flexi_logger::Logger::with(log_spec)
+        .format_for_writer(color_logger_format)
+        .format_for_files(nocolor_logger_format)
+        .log_target(LogTarget::FileAndWriter(Box::new(StdoutLogWriter::new(
+            color_logger_format,
+        ))));
 
     let logger = logger.append();
 
